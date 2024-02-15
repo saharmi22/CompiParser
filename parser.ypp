@@ -1,0 +1,71 @@
+%{
+#include <stdio.h>
+#include <iostream>
+using namespace std;
+int yylex();
+void yyerror(const char*);
+%}
+
+%token INT
+%token BYTE
+%token B
+%token BOOL
+%token AND
+%token OR
+%token NOT
+%token TRUE
+%token FALSE
+%token RETURN
+%token IF
+%token ELSE
+%token WHILE
+%token BREAK
+%token CONTINUE
+%token SC
+%token LPAREN
+%token RPAREN
+%token LBRACE
+%token RBRACE
+%token ASSIGN
+%token RELOP
+%token BINOP
+%token ID
+%token NUM
+%token STRING
+
+%%
+
+Program: Statments;
+Statments: Statment;
+Statments: Statments Statment;
+Statment: LBRACE Statments RBRACE;
+Statment: Type ID SC;
+Statment: Type ID ASSIGN Exp SC;
+Statment: ID ASSIGN Exp SC;
+Statment: Call SC;
+Statment: RETURN SC;
+Statment: IF LPAREN Exp RPAREN Statment MaybeElse;
+Statment: WHILE LPAREN Exp RPAREN Statment;
+Statment: BREAK SC
+Statment: CONTINUE SC;
+MaybeElse: ELSE Statment | /*epsilon*/;
+Call: ID LPAREN Exp RPAREN;
+Type: INT;
+Type: BYTE;
+Type: BOOL;
+Exp: LPAREN Exp RPAREN;
+Exp: Exp BINOP Exp;
+Exp: ID;
+Exp: Call;
+Exp: NUM;
+Exp: NUM B;
+Exp: STRING;
+Exp: TRUE;
+Exp: FALSE;
+Exp: NOT Exp;
+Exp: Exp AND Exp;
+Exp: Exp OR Exp;
+Exp: Exp RELOP Exp;
+Exp: LPAREN Type RPAREN Exp;
+
+%%
