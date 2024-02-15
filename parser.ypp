@@ -10,9 +10,9 @@ void yyerror(const char*);
 %token BYTE
 %token B
 %token BOOL
-%token AND
-%token OR
-%token NOT
+%left AND
+%left OR
+%right NOT
 %token TRUE
 %token FALSE
 %token RETURN
@@ -22,50 +22,53 @@ void yyerror(const char*);
 %token BREAK
 %token CONTINUE
 %token SC
-%token LPAREN
-%token RPAREN
-%token LBRACE
 %token RBRACE
+%token LBRACE
 %token ASSIGN
-%token RELOP
-%token BINOP
+%left RELOP
 %token ID
 %token NUM
 %token STRING
+%left PLUS
+%left MINUS
+%right MULT
+%right DEV
+%left RPAREN
+%left LPAREN
 
 %%
 
 Program: Statments;
-Statments: Statment;
-Statments: Statments Statment;
-Statment: LBRACE Statments RBRACE;
-Statment: Type ID SC;
-Statment: Type ID ASSIGN Exp SC;
-Statment: ID ASSIGN Exp SC;
-Statment: Call SC;
-Statment: RETURN SC;
-Statment: IF LPAREN Exp RPAREN Statment MaybeElse;
-Statment: WHILE LPAREN Exp RPAREN Statment;
-Statment: BREAK SC
-Statment: CONTINUE SC;
-MaybeElse: ELSE Statment | /*epsilon*/;
+Statments: Statment | Statments Statment;
+Statment: LBRACE Statments RBRACE
+        | Type MaybeAssign
+        | ID ASSIGN Exp SC
+        | Call SC
+        | RETURN SC 
+        | IF LPAREN Exp RPAREN Statment
+        | %prec IF LPAREN Exp RPAREN Statment ELSE Statment
+        | WHILE LPAREN Exp RPAREN Statment;
+        | BREAK SC
+        | CONTINUE SC;
+MaybeAssign: SC | ASSIGN Exp SC;
 Call: ID LPAREN Exp RPAREN;
-Type: INT;
-Type: BYTE;
-Type: BOOL;
-Exp: LPAREN Exp RPAREN;
-Exp: Exp BINOP Exp;
-Exp: ID;
-Exp: Call;
-Exp: NUM;
-Exp: NUM B;
-Exp: STRING;
-Exp: TRUE;
-Exp: FALSE;
-Exp: NOT Exp;
-Exp: Exp AND Exp;
-Exp: Exp OR Exp;
-Exp: Exp RELOP Exp;
-Exp: LPAREN Type RPAREN Exp;
+Type: INT | BYTE | BOOL;
+Exp: LPAREN Exp RPAREN 
+    | Exp PLUS Exp
+    | Exp MINUS Exp
+    | Exp MULT Exp
+    | Exp DEV Exp 
+    | ID
+    | Call
+    | NUM
+    | NUM B
+    | STRING
+    | TRUE
+    | FALSE
+    | NOT Exp
+    | Exp AND Exp
+    | Exp OR Exp
+    | Exp RELOP Exp
+    |LPAREN Type RPAREN Exp;
 
 %%

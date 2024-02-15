@@ -1,9 +1,9 @@
 %{
     #include <stdio.h>
-    #include "tokens.hpp"
     #include <string.h>
     void showToken(char*);
     int findUndefinedEscape(char* input);
+    #include "parser.tab.hpp"
 %}
 
 /*%option yyleng*/
@@ -38,11 +38,14 @@ continue    return CONTINUE;
 
 
 ==|!=|<|>|<=|>=       return RELOP;
-+|-|*|/                                    return BINOP;
+\+                      return PLUS;
+\-                      return MINUS;
+\*                      return MULT;
+\/                      return DIV;
 \/\/[^\r\n]*[ \r|\n|\r\n]?                   ;
 [a-zA-Z][a-zA-Z0-9]*                     return ID;
 (0|([1-9][0-9]*))                           return NUM;
-"([^\n\r\"\\]|\\[rnt"\\])+"        return STRING;
+\"([^\n\r\"\\]|\\[rnt"\\])+\"        return STRING;
 {whitespace}      ;
 .   return ERROR;
 %%
