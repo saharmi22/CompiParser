@@ -65,7 +65,7 @@
      PLUS = 281,
      MINUS = 282,
      MULT = 283,
-     DEV = 284,
+     DIV = 284,
      RPAREN = 285,
      LPAREN = 286
    };

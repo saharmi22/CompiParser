@@ -1,9 +1,9 @@
 %{
-    #include <stdio.h>
-    #include <string.h>
-    void showToken(char*);
-    int findUndefinedEscape(char* input);
-    #include "parser.tab.hpp"
+#include <stdio.h>
+#include <string.h>
+#include "output.hpp"
+#include "parser.tab.hpp"
+using namespace output;
 %}
 
 /*%option yyleng*/
@@ -14,9 +14,9 @@ whitespace  ([ \n\t\r])
 
 %%
 
-int                             return INT;
-byte                            return BYTE;
-b                               return B;
+int         return INT;
+byte        return BYTE;
+b           return B;
 bool        return BOOL;
 and         return AND;
 or          return OR;
@@ -35,8 +35,6 @@ continue    return CONTINUE;
 \{          return LBRACE;
 \}          return RBRACE;
 =           return ASSIGN;
-
-
 ==|!=|<|>|<=|>=       return RELOP;
 \+                      return PLUS;
 \-                      return MINUS;
@@ -47,5 +45,6 @@ continue    return CONTINUE;
 (0|([1-9][0-9]*))                           return NUM;
 \"([^\n\r\"\\]|\\[rnt"\\])+\"        return STRING;
 {whitespace}      ;
-.   return ERROR;
+.   {errorLex(yylineno); exit(0);}
+
 %%

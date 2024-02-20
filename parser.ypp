@@ -1,7 +1,10 @@
 %{
 #include <stdio.h>
 #include <iostream>
+#include "output.hpp"
 using namespace std;
+using namespace output;
+extern int yylineno;
 int yylex();
 void yyerror(const char*);
 %}
@@ -32,43 +35,62 @@ void yyerror(const char*);
 %left PLUS
 %left MINUS
 %right MULT
-%right DEV
+%right DIV
 %left RPAREN
 %left LPAREN
 
 %%
 
-Program: Statments;
-Statments: Statment | Statments Statment;
-Statment: LBRACE Statments RBRACE
-        | Type MaybeAssign
-        | ID ASSIGN Exp SC
-        | Call SC
-        | RETURN SC 
-        | IF LPAREN Exp RPAREN Statment
-        | %prec IF LPAREN Exp RPAREN Statment ELSE Statment
-        | WHILE LPAREN Exp RPAREN Statment;
-        | BREAK SC
-        | CONTINUE SC;
-MaybeAssign: SC | ASSIGN Exp SC;
-Call: ID LPAREN Exp RPAREN;
-Type: INT | BYTE | BOOL;
-Exp: LPAREN Exp RPAREN 
-    | Exp PLUS Exp
-    | Exp MINUS Exp
-    | Exp MULT Exp
-    | Exp DEV Exp 
-    | ID
-    | Call
-    | NUM
-    | NUM B
-    | STRING
-    | TRUE
-    | FALSE
-    | NOT Exp
-    | Exp AND Exp
-    | Exp OR Exp
-    | Exp RELOP Exp
-    |LPAREN Type RPAREN Exp;
+Program: Statments {printProductionRule(0);}
+        
+Statments: Statment {printProductionRule(1);}
+        | Statments Statment {printProductionRule(2);}
+        
+Statment: LBRACE Statments RBRACE {printProductionRule(3);}
+        | Type ID SC {printProductionRule(4);}
+        | Type ID ASSIGN Exp SC {printProductionRule(5);}
+        | ID ASSIGN Exp SC {printProductionRule(6);}
+        | Call SC {printProductionRule(7);}
+        | RETURN SC {printProductionRule(8);}
+        | IF LPAREN Exp RPAREN Statment {printProductionRule(9);}
+        | %prec IF LPAREN Exp RPAREN Statment ELSE Statment {printProductionRule(10);}
+        | WHILE LPAREN Exp RPAREN Statment {printProductionRule(11);}
+        | BREAK SC {printProductionRule(12);}
+        | CONTINUE SC {printProductionRule(13);}
+        
+Call: ID LPAREN Exp RPAREN {printProductionRule(14);};
+Type: INT {printProductionRule(15);}
+    | BYTE {printProductionRule(16);}
+    | BOOL  {printProductionRule(17);}
+    
+Exp: LPAREN Exp RPAREN {printProductionRule(18);}
+    | Exp PLUS Exp {printProductionRule(19);}
+    | Exp MINUS Exp {printProductionRule(19);}
+    | Exp MULT Exp {printProductionRule(19);}
+    | Exp DIV Exp {printProductionRule(19);}
+    | ID {printProductionRule(20);}
+    | Call {printProductionRule(21);}
+    | NUM {printProductionRule(22);}
+    | NUM B {printProductionRule(23);}
+    | STRING {printProductionRule(24);}
+    | TRUE {printProductionRule(25);}
+    | FALSE {printProductionRule(26);}
+    | NOT Exp {printProductionRule(27);}
+    | Exp AND Exp {printProductionRule(28);}
+    | Exp OR Exp {printProductionRule(29);}
+    | Exp RELOP Exp {printProductionRule(30);}
+    |LPAREN Type RPAREN Exp {printProductionRule(31);}
+    
 
 %%
+
+int main(){
+    return yyparse();
+}
+
+void yyerror(const char* msg){
+    errorSyn(yylineno);
+    exit(0);
+}
+
+

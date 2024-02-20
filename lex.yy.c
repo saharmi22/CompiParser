@@ -455,11 +455,11 @@ char *yytext;
 #line 1 "scanner.lex"
 #define INITIAL 0
 #line 2 "scanner.lex"
-    #include <stdio.h>
-    #include <string.h>
-    void showToken(char*);
-    int findUndefinedEscape(char* input);
-    #include "parser.tab.hpp"
+#include <stdio.h>
+#include <string.h>
+#include "output.hpp"
+#include "parser.tab.hpp"
+using namespace output;
 /*%option yyleng*/
 #line 465 "lex.yy.c"
 
@@ -813,62 +813,62 @@ return ASSIGN;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 40 "scanner.lex"
+#line 38 "scanner.lex"
 return RELOP;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 41 "scanner.lex"
+#line 39 "scanner.lex"
 return PLUS;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 42 "scanner.lex"
+#line 40 "scanner.lex"
 return MINUS;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 43 "scanner.lex"
+#line 41 "scanner.lex"
 return MULT;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 44 "scanner.lex"
+#line 42 "scanner.lex"
 return DIV;
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 45 "scanner.lex"
+#line 43 "scanner.lex"
 ;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 46 "scanner.lex"
+#line 44 "scanner.lex"
 return ID;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 47 "scanner.lex"
+#line 45 "scanner.lex"
 return NUM;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 48 "scanner.lex"
+#line 46 "scanner.lex"
 return STRING;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 49 "scanner.lex"
+#line 47 "scanner.lex"
 ;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 50 "scanner.lex"
-return ERROR;
+#line 48 "scanner.lex"
+errorLex(yylineno);
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 51 "scanner.lex"
+#line 50 "scanner.lex"
 ECHO;
 	YY_BREAK
 #line 875 "lex.yy.c"
@@ -1755,5 +1755,5 @@ int main()
 	return 0;
 	}
 #endif
-#line 51 "scanner.lex"
+#line 50 "scanner.lex"
 
