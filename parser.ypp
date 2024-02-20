@@ -9,77 +9,56 @@ int yylex();
 void yyerror(const char*);
 %}
 
-%token INT
-%token BYTE
-%token B
-%token BOOL
-%left AND
-%left OR
+%token INT BYTE B BOOL TRUE FALSE RETURN IF WHILE BREAK CONTINUE SC RBRACE LBRACE ASSIGN ID NUM STRING 
+%left AND OR
 %right NOT
-%token TRUE
-%token FALSE
-%token RETURN
-%token IF
-%token ELSE
-%token WHILE
-%token BREAK
-%token CONTINUE
-%token SC
-%token RBRACE
-%token LBRACE
-%token ASSIGN
 %left RELOP
-%token ID
-%token NUM
-%token STRING
-%left PLUS
-%left MINUS
-%right MULT
-%right DIV
-%left RPAREN
-%left LPAREN
+%left PLUS MINUS
+%right MULT DIV
+%left RPAREN LPAREN
+%right ELSE
 
 %%
 
-Program: Statments {printProductionRule(0);}
+Program: Statments {printProductionRule(1);}
         
-Statments: Statment {printProductionRule(1);}
-        | Statments Statment {printProductionRule(2);}
+Statments: Statment {printProductionRule(2);}
+        | Statments Statment {printProductionRule(3);}
         
-Statment: LBRACE Statments RBRACE {printProductionRule(3);}
-        | Type ID SC {printProductionRule(4);}
-        | Type ID ASSIGN Exp SC {printProductionRule(5);}
-        | ID ASSIGN Exp SC {printProductionRule(6);}
-        | Call SC {printProductionRule(7);}
-        | RETURN SC {printProductionRule(8);}
-        | IF LPAREN Exp RPAREN Statment {printProductionRule(9);}
-        | %prec IF LPAREN Exp RPAREN Statment ELSE Statment {printProductionRule(10);}
-        | WHILE LPAREN Exp RPAREN Statment {printProductionRule(11);}
-        | BREAK SC {printProductionRule(12);}
-        | CONTINUE SC {printProductionRule(13);}
+Statment: LBRACE Statments RBRACE {printProductionRule(4);}
+        | Type ID SC {printProductionRule(5);}
+        | Type ID ASSIGN Exp SC {printProductionRule(6);}
+        | ID ASSIGN Exp SC {printProductionRule(7);}
+        | Call SC {printProductionRule(8);}
+        | RETURN SC {printProductionRule(9);}
+        | IF LPAREN Exp RPAREN Statment {printProductionRule(10);}
+        | IF LPAREN Exp RPAREN Statment ELSE Statment {printProductionRule(11);}
+        | WHILE LPAREN Exp RPAREN Statment {printProductionRule(12);}
+        | BREAK SC {printProductionRule(13);}
+        | CONTINUE SC {printProductionRule(14);}
         
-Call: ID LPAREN Exp RPAREN {printProductionRule(14);};
-Type: INT {printProductionRule(15);}
-    | BYTE {printProductionRule(16);}
-    | BOOL  {printProductionRule(17);}
+Call: ID LPAREN Exp RPAREN {printProductionRule(15);};
+Type: INT {printProductionRule(16);}
+    | BYTE {printProductionRule(17);}
+    | BOOL  {printProductionRule(18);}
     
-Exp: LPAREN Exp RPAREN {printProductionRule(18);}
-    | Exp PLUS Exp {printProductionRule(19);}
-    | Exp MINUS Exp {printProductionRule(19);}
-    | Exp MULT Exp {printProductionRule(19);}
-    | Exp DIV Exp {printProductionRule(19);}
-    | ID {printProductionRule(20);}
-    | Call {printProductionRule(21);}
-    | NUM {printProductionRule(22);}
-    | NUM B {printProductionRule(23);}
-    | STRING {printProductionRule(24);}
-    | TRUE {printProductionRule(25);}
-    | FALSE {printProductionRule(26);}
-    | NOT Exp {printProductionRule(27);}
-    | Exp AND Exp {printProductionRule(28);}
-    | Exp OR Exp {printProductionRule(29);}
-    | Exp RELOP Exp {printProductionRule(30);}
-    |LPAREN Type RPAREN Exp {printProductionRule(31);}
+Exp: LPAREN Exp RPAREN {printProductionRule(19);}
+    | Exp PLUS Exp {printProductionRule(20);}
+    | Exp MINUS Exp {printProductionRule(20);}
+    | Exp MULT Exp {printProductionRule(20);}
+    | Exp DIV Exp {printProductionRule(20);}
+    | ID {printProductionRule(21);}
+    | Call {printProductionRule(22);}
+    | NUM {printProductionRule(23);}
+    | NUM B {printProductionRule(24);}
+    | STRING {printProductionRule(25);}
+    | TRUE {printProductionRule(26);}
+    | FALSE {printProductionRule(27);}
+    | NOT Exp {printProductionRule(28);}
+    | Exp AND Exp {printProductionRule(29);}
+    | Exp OR Exp {printProductionRule(30);}
+    | Exp RELOP Exp {printProductionRule(31);}
+    |LPAREN Type RPAREN Exp {printProductionRule(32);}
     
 
 %%
